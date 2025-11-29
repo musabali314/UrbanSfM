@@ -2,7 +2,7 @@
 
 This repository contains my implementation of a complete **Structure from Motion (SfM)** pipeline developed for the CS436 “3D Scene Reconstruction & Virtual Tour” project. The system reconstructs a **sparse 3D point cloud** and **camera trajectory** from a sequence of images, progressing from basic feature extraction to a full incremental SfM pipeline.
 
-The project is implemented week-wise, following the course deliverables:
+The project is implemented week-wise following the course deliverables:
 
 - **Week 1:** SIFT features & image preprocessing
 - **Week 2:** Two-view geometry, relative pose, and triangulation
@@ -25,8 +25,6 @@ Outputs include `.ply` point clouds and detailed Jupyter notebooks for each stag
 ├── Week1_25100190_25100334.ipynb    # Week 1: SIFT, preprocessing, matching
 ├── Week2_25100190_25100334.ipynb    # Week 2: Essential matrix + 2-view SfM
 ├── Week3_25100190_25100334.ipynb    # Week 3: Full incremental SfM
-│
-├── week2_two_view_cloud.ply         # Example 2-view point cloud (Week 2)
 └── week3_pointcloud.ply             # Final sparse point cloud (Week 3)
 ```
 
