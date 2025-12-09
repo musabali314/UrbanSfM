@@ -34,7 +34,6 @@ Outputs include `.ply` point clouds, detailed Jupyter notebooks for each stage, 
     ├── Agisoft Metashape PCD (low quality sample for github).ply
     ├── index.html                       # Viewer front-end (Three.js + UI)
     ├── tour.js                          # Viewer logic, camera navigation, etc.
-    └── Viewer_Demo.mp4                  # Demo video of the interactive viewer
 ```
 
 > **Note:** For the **interactive viewer demonstration**, we step slightly outside the Week 3 limited-area reconstruction (which only covers a smaller corner of the scene) and instead use a **full-room point cloud** generated from the same SfM pipeline logic but reconstructed over a larger space.
@@ -128,7 +127,10 @@ This viewer lives in the `Interactive Viewer/` folder and uses:
 
 Below is an embedded demo video (`Viewer_Demo.mp4`) showing the interactive viewer in action:
 
-https://github.com/user-attachments/assets/e56ae89c-8aa8-47c7-8e16-0b97c9711dac
+
+https://github.com/user-attachments/assets/4ac5b0ac-1715-435a-b568-6d733397817a
+
+
 
 
 
