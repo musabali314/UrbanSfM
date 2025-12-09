@@ -21,6 +21,7 @@ Outputs include `.ply` point clouds, detailed Jupyter notebooks for each stage, 
 │
 ├── UrbanSfM_Project.pdf                 # Official CS436 project description
 ├── Deliverables.pdf                     # Weekly tasks & marking scheme
+├── UrbanSfM - Multi-View 3D Reconstruction and Photosynth-Style Virtual Navigation.pdf  # Project Paper
 │
 ├── Week1_25100190_25100334.ipynb        # Week 1: SIFT, preprocessing, matching
 ├── Week2_25100190_25100334.ipynb        # Week 2: Essential matrix + 2-view SfM
