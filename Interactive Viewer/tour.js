@@ -2,11 +2,9 @@ import * as THREE from 'three';
 import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-// --- CONFIGURATION ---
-const PLY_FILE = './Agisoft Metashape PLY2.0.ply';
+const PLY_FILE = './Agisoft Metashape PCD2.0 (low quality sample for github).ply';
 const CAMERAS_FILE = './Agisoft Metashape Cameras2.0.json';
-const TRANSITION_DURATION = 1500; // 1.5 seconds for the smooth move (required by TWEEN)
-// ---------------------
+const TRANSITION_DURATION = 1500;
 
 let scene, camera, renderer, controls;
 const worldGroup = new THREE.Group();
@@ -18,32 +16,32 @@ init();
 animate();
 
 function init() {
-    // 1. Setup Scene
+
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
 
-    // Orientation fix (Z-up → Y-up)
-    scene.add(worldGroup);
-    worldGroup.rotation.x = -Math.PI / 2;
 
-    // 2. Setup Camera
+    scene.add(worldGroup);
+
+
+
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
     camera.position.set(0, 10, 20);
 
-    // 3. Renderer
+
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // 4. Orbit Controls
+
     controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
 
-    // 5. Light
+
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
 
-    // 6. LOAD POINT CLOUD (COLOR FIX APPLIED)
+
     const loader = new PLYLoader();
     loader.load(PLY_FILE, function (geometry) {
 
@@ -51,11 +49,11 @@ function init() {
         const center = geometry.boundingSphere.center;
         const radius = geometry.boundingSphere.radius;
 
-        // Center the geometry
+
         geometry.translate(-center.x, -center.y, -center.z);
 
-        // --- FIX: enable vertex colors and remove forced white ---
-        // Convert Uint8 colors → Float32 if needed
+
+
         if (geometry.attributes.color && !(geometry.attributes.color.array instanceof Float32Array)) {
             const old = geometry.attributes.color;
             geometry.setAttribute(
@@ -66,14 +64,13 @@ function init() {
 
         const material = new THREE.PointsMaterial({
             size: 0.15,
-            vertexColors: true   // <--- IMPORTANT FIX
+            vertexColors: true
         });
-        // ----------------------------------------------------------
 
         const points = new THREE.Points(geometry, material);
         worldGroup.add(points);
 
-        // Adjust camera for a full-scene view
+
         camera.position.set(0, radius * 0.5, radius * 2.5);
         camera.near = 0.1;
         camera.far = radius * 100;
@@ -84,10 +81,10 @@ function init() {
         console.error('An error occurred loading the PLY:', error);
     });
 
-    // 7. LOAD CAMERAS
+
     loadCameras();
 
-    // 8. Events
+
     window.addEventListener('resize', onWindowResize);
     window.addEventListener('click', onMouseClick);
 }
@@ -106,7 +103,7 @@ function loadCameras() {
                 const marker = new THREE.Mesh(sphereGeo, sphereMat);
                 marker.position.set(center[0], center[1], center[2]);
 
-                // Apply rotation matrix
+
                 const R = camData.rotation;
                 const m = new THREE.Matrix4();
                 m.set(
@@ -117,7 +114,7 @@ function loadCameras() {
                 );
                 marker.setRotationFromMatrix(m);
 
-                // Store filename for overlay
+
                 marker.userData = {
                     filename: camData.filename
                 };
@@ -132,11 +129,11 @@ function loadCameras() {
 function onMouseClick(event) {
     const overlay = document.getElementById('photo-overlay');
 
-    // Hide previous image (fade out)
+
     overlay.style.opacity = 0;
     overlay.src = "";
 
-    // Mouse coords
+
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
@@ -163,13 +160,13 @@ function moveToNode(node) {
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(function (obj) {
 
-            // Lerp position
+
             camera.position.lerpVectors(currentPos, targetPos, obj.t);
 
-            // Slerp orientation
+
             camera.quaternion.slerpQuaternions(currentQuat, targetQuat, obj.t);
 
-            // Fix controls target to prevent drift
+
             const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
             controls.target.copy(camera.position).add(forward);
             controls.update();
