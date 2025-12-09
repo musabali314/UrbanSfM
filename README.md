@@ -127,10 +127,10 @@ This viewer lives in the `Interactive Viewer/` folder and uses:
 
 Below is an embedded demo video (`Viewer_Demo.mp4`) showing the interactive viewer in action:
 
-```html
-<video src="Interactive Viewer/Viewer_Demo.mp4" controls width="640">
-  Your browser does not support the video tag.
-</video>
+https://github.com/user-attachments/assets/e56ae89c-8aa8-47c7-8e16-0b97c9711dac
+
+
+
 ```
 
 ### 🔧 Running the Viewer Locally
