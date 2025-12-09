@@ -9,24 +9,35 @@ The project is implemented week-wise following the course deliverables:
 - **Week 3:** Full incremental SfM (PnP, triangulation, BA, pruning)
 - **Week 4–5:** View-graph construction & Photosynth-style virtual tour
 
-Outputs include `.ply` point clouds and detailed Jupyter notebooks for each stage.
+Outputs include `.ply` point clouds, detailed Jupyter notebooks for each stage, and an **interactive web-based viewer** to explore reconstructed scenes.
 
 ---
 
 ## 📁 Repository Structure
 
-```
+```text
 .
-├── Dataset/                         # Image sequences for reconstruction
+├── Dataset/                             # Image sequences for reconstruction
 │
-├── UrbanSfM_Project.pdf             # Official CS436 project description
-├── Deliverables.pdf                 # Weekly tasks & marking scheme
+├── UrbanSfM_Project.pdf                 # Official CS436 project description
+├── Deliverables.pdf                     # Weekly tasks & marking scheme
 │
-├── Week1_25100190_25100334.ipynb    # Week 1: SIFT, preprocessing, matching
-├── Week2_25100190_25100334.ipynb    # Week 2: Essential matrix + 2-view SfM
-├── Week3_25100190_25100334.ipynb    # Week 3: Full incremental SfM
-└── week3_pointcloud.ply             # Final sparse point cloud (Week 3)
+├── Week1_25100190_25100334.ipynb        # Week 1: SIFT, preprocessing, matching
+├── Week2_25100190_25100334.ipynb        # Week 2: Essential matrix + 2-view SfM
+├── Week3_25100190_25100334.ipynb        # Week 3: Full incremental SfM
+├── week3_pointcloud.ply                 # Final sparse point cloud (Week 3)
+│
+└── Interactive Viewer/                  # Web-based 3D viewer & tour
+    ├── 3js_App_Guide.pdf                # Notes/guide for the Three.js viewer
+    ├── Agisoft Metashape Cameras.json   # Camera poses exported from Metashape
+    ├── Agisoft Metashape PCD (low quality sample for github).ply
+    ├── index.html                       # Viewer front-end (Three.js + UI)
+    ├── tour.js                          # Viewer logic, camera navigation, etc.
+    └── Viewer_Demo.mp4                  # Demo video of the interactive viewer
 ```
+
+> **Note:** For the **interactive viewer demonstration**, we step slightly outside the Week 3 limited-area reconstruction (which only covers a smaller corner of the scene) and instead use a **full-room point cloud** generated from the same SfM pipeline logic but reconstructed over a larger space.
+> The `.ply` in the `Interactive Viewer/` folder is a **sample sparse point cloud** suitable for lightweight visualization on GitHub and in the web viewer.
 
 ---
 
@@ -50,7 +61,7 @@ pip install numpy opencv-contrib-python open3d scipy matplotlib
 
 Place your dataset in:
 
-```
+```text
 Dataset/Option 1/
     ├── img_0001.jpg
     ├── img_0002.jpg
@@ -91,36 +102,82 @@ This performs:
 The reconstruction outputs:
 - `week2_two_view_cloud.ply` — Raw two-view reconstruction
 - `week3_pointcloud.ply` — Final sparse map from all images
+---
 
-You can visualize them using:
+## 🌐 Interactive Web-Based Viewer (Virtual Tour)
 
-```python
-import open3d as o3d
-pcd = o3d.io.read_point_cloud("week3_pointcloud.ply")
-o3d.visualization.draw_geometries([pcd])
+In addition to the notebooks, the repository includes an **interactive Three.js viewer** that lets you:
+
+- Load a **sparse point cloud** (`.ply`)
+- Visualize **camera poses** as clickable nodes
+- “Jump” between views, approximating a **Photosynth-style virtual tour**
+
+This viewer lives in the `Interactive Viewer/` folder and uses:
+
+- `Agisoft Metashape PCD.ply` — a **sample full-room sparse point cloud** used for demonstration (lighter, GitHub-friendly version)
+- `Agisoft Metashape Cameras.json` — camera extrinsics exported from Metashape and converted to JSON
+- `index.html` + `tour.js` — the front-end that uses **Three.js** to render the scene and navigate between camera viewpoints
+
+> 📌 **Design choice:**
+> For Week 3, the reconstructed area was a **limited corner** of the scene, which is perfect for demonstrating the core SfM pipeline but visually less compelling as an interactive “tour”.
+> To better showcase the use of the viewer, we generated a **larger, room-scale point cloud** using the same reconstruction principles and used that for the viewer demo.
+> The point cloud stored in `Interactive Viewer/` is a **sample sparse version** tailored for GitHub and browser performance.
+
+### ▶️ Viewer Demo (Embedded)
+
+Below is an embedded demo video (`Viewer_Demo.mp4`) showing the interactive viewer in action:
+
+```html
+<video src="Interactive Viewer/Viewer_Demo.mp4" controls width="640">
+  Your browser does not support the video tag.
+</video>
 ```
+
+### 🔧 Running the Viewer Locally
+
+To run the interactive viewer on your machine:
+
+1. Navigate to the `Interactive Viewer/` directory:
+   ```bash
+   cd "Interactive Viewer"
+   ```
+
+2. Start a simple HTTP server (required because the viewer uses ES modules & `fetch`):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   ```
+   or
+   ```bash
+   python3 -m http.server 8000
+   ```
+
+3. Open your browser and go to:
+   ```text
+   http://localhost:8000/index.html
+   ```
+
+You should see:
+
+- The **sparse point cloud** rendered in 3D
+- **Blue camera nodes** (or similar markers) scattered in the room
+- Clicking on a camera node moves the virtual camera to the corresponding pose and updates the view, giving a **virtual tour** experience.
 
 ---
 
 ## 📜 Notes
 
 This project follows the exact structure required by CS436 and implements:
+
 - 2-view SfM
 - Multi-view incremental SfM
 - Pose-only BA
 - Custom point filtering & keypoint-to-3D remapping
 - Feature preprocessing pipeline
 - Colorized sparse cloud generation
-
----
-
-## 📄 License
-
-This work is for **academic use only** as part of CS436.
-You may reference or adapt the code but not redistribute it as a standalone product.
-
----
+- A web-based interactive viewer to explore reconstructed scenes and camera trajectories
 
 ## ✨ Author
+
 **Muhammad Musab Ali Chaudhry and Areesha Khan**
 LUMS — CS436 (Computer Vision & Robotics)
